@@ -1,4 +1,4 @@
-export default function handleTaskBlock(condition) {
+export default function taskBlock(condition) {
   const firstTask = false;
   const secondTask = true;
 
