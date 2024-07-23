@@ -1,8 +1,8 @@
-export default function taskBlock(condition) {
+export default function taskBlock(trueOrFalse) {
   const firstTask = false;
   const secondTask = true;
 
-  if (condition) {
+  if (trueOrFalse) {
     // eslint-disable-next-line
     let firstTask = true;
     // eslint-disable-next-line
