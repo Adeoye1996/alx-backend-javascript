@@ -1,30 +1,33 @@
 const fs = require('fs');
 
-function countStudents(path) {
-  if (!fs.existsSync(path)) {
-    throw Error('Cannot load the database');
-  }
-  // block other parallel process
-  // and do the current file reading process
+const countStudents = (path) => {
+  if (!fs.existsSync(path)) throw new Error('Cannot load the database');
+
   const data = fs.readFileSync(path, 'utf8');
+
+  // Split where a new line exists
   const students = data.split('\n')
-    .map((student) => student.split(','))
-    .filter((student) => student.length === 4 && student[0] !== 'firstname')
-    .map((student) => ({
-      firstName: student[0],
-      lastName: student[1],
-      age: student[2],
-      field: student[3],
+    // Turn a row into an array by splitting by a ','
+    .map((row) => row.split(','))
+    // Skip first row
+    .filter((row) => row.length === 4 && row[0] !== 'firstname')
+    // Convert into objects
+    .map((row) => ({
+      firstName: row[0],
+      lastName: row[1],
+      age: row[2],
+      field: row[3].replace('\r', ''),
     }));
-  const csStudents = students
-    .filter((student) => student.field === 'CS')
+  // Generate CS students
+  const CS = students.filter((student) => student.field === 'CS')
     .map((student) => student.firstName);
-  const sweStudents = students
-    .filter((student) => student.field === 'SWE')
+  // Generate SWE students
+  const SWE = students.filter((student) => student.field === 'SWE')
     .map((student) => student.firstName);
+  // Print length and convert each into a string
   console.log(`Number of students: ${students.length}`);
-  console.log(`Number of students in CS: ${csStudents.length}. List: ${csStudents.join(', ')}`);
-  console.log(`Number of students in SWE: ${sweStudents.length}. List: ${sweStudents.join(', ')}`);
-}
+  console.log(`Number of students in CS: ${CS.length}. List: ${CS.join(', ')}`);
+  console.log(`Number of students in SWE: ${SWE.length}. List: ${SWE.join(', ')}`);
+};
 
 module.exports = countStudents;
